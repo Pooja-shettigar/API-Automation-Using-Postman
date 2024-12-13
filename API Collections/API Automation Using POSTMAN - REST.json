@@ -1,0 +1,1213 @@
+{
+	"info": {
+		"_postman_id": "2298c436-157d-486f-bbf5-4721f804861e",
+		"name": "API Automation Using POSTMAN - REST",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12636482"
+	},
+	"item": [
+		{
+			"name": "POSITIVE TESTING - E2E",
+			"item": [
+				{
+					"name": "CREATE USER API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify if status code is 201 Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.have.status(\"Created\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if response body contains id, name, email, gender, status\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"gender\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"status\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if Content-Type=application/json; charset=utf-8\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if gender is [male, female]\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.gender).to.be.oneOf([\"male\", \"female\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if status is [active, inactive]\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.be.oneOf([\"active\", \"inactive\"]);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"var extractedID = jsonData.id;\r",
+									"var extractedName = jsonData.name;\r",
+									"\r",
+									"pm.collectionVariables.set(\"cID\", extractedID);\r",
+									"pm.collectionVariables.set(\"cName\",extractedName);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 596564be8cf77ca21617c3b4a0bd51c3f2d31b8bab4c0e97921b26475ea85f12"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomLastName}}\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"status\": \"active\"\r\n}"
+						},
+						"url": {
+							"raw": "{{eProtocol}}://{{eBaseURL}}/{{cPath}}users",
+							"protocol": "{{eProtocol}}",
+							"host": [
+								"{{eBaseURL}}"
+							],
+							"path": [
+								"{{cPath}}users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LIST USERS API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Demonstrating of variable set from javaScript\r",
+									"pm.collectionVariables.set(\"cAuthorizationToken\",\"596564be8cf77ca21617c3b4a0bd51c3f2d31b8bab4c0e97921b26475ea85f12\")\r",
+									"\r",
+									"//Print the collectionVariables name\r",
+									"console.log(\"Print the collectionVariables name ->\" + pm.collectionVariables.get(\"cProtocol\"));\r",
+									"\r",
+									"pm.test(\"Verify if the response code = 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response time from the server is < 3seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response body is received from server\", function () {\r",
+									"    pm.response.to.have.body();\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response header Content-Type=application/json\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\",\"application/json; charset=utf-8\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response body contains fields such as id, name, email, gender, status\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"gender\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"status\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"console.log(\"Welcome to Postman API automation testing\");\r",
+									"console.log(\"The response code received from server is \"+pm.response.code);\r",
+									"console.log(\"The response message received from server is \"+pm.response.status);\r",
+									"console.log(\"The response time received from server is \"+pm.response.responseTime);\r",
+									"console.log(\"The response body received from server is \");\r",
+									"console.log(pm.response.json());\r",
+									"console.log(\"The response body size received from server is \");\r",
+									"console.log(pm.response.size());\r",
+									"console.log(\"The response headers received from server are \"+pm.response.headers);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{cAuthorizationToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{eProtocol}}://{{eBaseURL}}/{{cPath}}/users",
+							"protocol": "{{eProtocol}}",
+							"host": [
+								"{{eBaseURL}}"
+							],
+							"path": [
+								"{{cPath}}",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE USER API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify if status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if response body contains id, name, email, gender, status\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"gender\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"status\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if Content-Type=application/json; charset=utf-8\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if gender is [male, female]\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.gender).to.be.oneOf([\"male\", \"female\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if status is [active, inactive]\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.be.oneOf([\"active\", \"inactive\"]);\r",
+									"});\r",
+									"\r",
+									"console.log(\"The HTTP method used in the API request is \"+pm.request.method);\r",
+									"console.log(\"The API URL in the request is \"+pm.request.url);\r",
+									"console.log(\"The API request name is \"+pm.info.requestName);\r",
+									"console.log(\"The request headers in the request are \"+pm.request.headers);\r",
+									"console.log(\"The request body is \");\r",
+									"console.log(pm.request.body);\r",
+									"console.log(\"The API request size is \");\r",
+									"console.log(pm.request.size());\r",
+									"\r",
+									"var responseBody = pm.response.json();\r",
+									"console.log(\"The data type of id field is \"+typeof(responseBody.id));\r",
+									"console.log(\"The data type of email field is \"+typeof(responseBody.email));\r",
+									"console.log(\"The data type of name field is \"+typeof(responseBody.name));\r",
+									"console.log(\"The data type of status field is \"+typeof(responseBody.status));\r",
+									"console.log(\"The data type of gender field is \"+typeof(responseBody.gender));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 596564be8cf77ca21617c3b4a0bd51c3f2d31b8bab4c0e97921b26475ea85f12"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Ramneet Kaur\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"status\": \"active\"\r\n}"
+						},
+						"url": {
+							"raw": "{{eProtocol}}://{{eBaseURL}}/{{cPath}}users/{{cID}}",
+							"protocol": "{{eProtocol}}",
+							"host": [
+								"{{eBaseURL}}"
+							],
+							"path": [
+								"{{cPath}}users",
+								"{{cID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE USER API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify if status code is 204 No Content\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"    pm.response.to.have.status(\"No Content\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if response body is empty\", function () {\r",
+									"    pm.response.to.not.have.body();\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 596564be8cf77ca21617c3b4a0bd51c3f2d31b8bab4c0e97921b26475ea85f12"
+							}
+						],
+						"url": {
+							"raw": "{{eProtocol}}://{{eBaseURL}}/{{cPath}}users/{{cID}}",
+							"protocol": "{{eProtocol}}",
+							"host": [
+								"{{eBaseURL}}"
+							],
+							"path": [
+								"{{cPath}}users",
+								"{{cID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "NEGAVTIVE TESTING",
+			"item": [
+				{
+					"name": "Unsupported HTTP Method",
+					"item": [
+						{
+							"name": "LIST USERS API",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Verify if the response code = 4XX status code\", function () {\r",
+											"    pm.response.to.be.clientError;\r",
+											"    pm.response.to.have.status(422);\r",
+											"    pm.response.to.have.status(\"Unprocessable Entity\");\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 596564be8cf77ca21617c3b4a0bd51c3f2d31b8bab4c0e97921b26475ea85f12"
+									}
+								],
+								"url": {
+									"raw": "{{eProtocol}}://{{eBaseURL}}/{{cPath}}/users",
+									"protocol": "{{eProtocol}}",
+									"host": [
+										"{{eBaseURL}}"
+									],
+									"path": [
+										"{{cPath}}",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UPDATE USER API",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Verify if the response code = 4XX status code\", function () {\r",
+											"    pm.response.to.be.clientError;\r",
+											"    pm.response.to.have.status(404);\r",
+											"    pm.response.to.have.status(\"Not Found\");\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer ba27e6bcbebdb6672d44749409fa9d17d58e44177848fa7079a86ee037657094"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Ramneet Kaur\",\r\n    \"email\": \"ramneet@gmail.com\",\r\n    \"status\": \"active\"\r\n}"
+								},
+								"url": {
+									"raw": "{{eProtocol}}://{{eBaseURL}}/{{cPath}}/users/7289418",
+									"protocol": "{{eProtocol}}",
+									"host": [
+										"{{eBaseURL}}"
+									],
+									"path": [
+										"{{cPath}}",
+										"users",
+										"7289418"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Broken Endpoint",
+					"item": [
+						{
+							"name": "CREATE USER API",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Verify if status code is 4XX\", function () {\r",
+											"    pm.response.to.be.clientError;\r",
+											"    pm.response.to.have.status(404);\r",
+											"    pm.response.to.have.status(\"Not Found\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 596564be8cf77ca21617c3b4a0bd51c3f2d31b8bab4c0e97921b26475ea85f12"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Test\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"abd@gmail.com\",\r\n    \"status\": \"active\"\r\n}"
+								},
+								"url": {
+									"raw": "{{eProtocol}}://{{eBaseURL}}/public/v/users",
+									"protocol": "{{eProtocol}}",
+									"host": [
+										"{{eBaseURL}}"
+									],
+									"path": [
+										"public",
+										"v",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UPDATE USER API",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Verify if status code is 4XX\", function () {\r",
+											"    pm.response.to.be.clientError;\r",
+											"    pm.response.to.have.status(404);\r",
+											"    pm.response.to.have.status(\"Not Found\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer ba27e6bcbebdb6672d44749409fa9d17d58e44177848fa7079a86ee037657094"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Ramneet Kaur\",\r\n    \"email\": \"ramneet@gmail.com\",\r\n    \"status\": \"active\"\r\n}"
+								},
+								"url": {
+									"raw": "{{eProtocol}}://{{eBaseURL}}/public/v4/users/7289418",
+									"protocol": "{{eProtocol}}",
+									"host": [
+										"{{eBaseURL}}"
+									],
+									"path": [
+										"public",
+										"v4",
+										"users",
+										"7289418"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Payload Tampering",
+					"item": [
+						{
+							"name": "INVALID DATA TYPE",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Verify if status code is 201 Created\", function () {\r",
+											"    pm.response.to.be.clientError;\r",
+											"    pm.response.to.have.status(422);\r",
+											"    pm.response.to.have.status(\"Unprocessable Entity\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 596564be8cf77ca21617c3b4a0bd51c3f2d31b8bab4c0e97921b26475ea85f12"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"123\",\r\n    \"gender\": \"gender\",\r\n    \"email\": \"abdgmailcom\",\r\n    \"status\": \"active\"\r\n}"
+								},
+								"url": {
+									"raw": "{{eProtocol}}://{{eBaseURL}}/{{cPath}}/users",
+									"protocol": "{{eProtocol}}",
+									"host": [
+										"{{eBaseURL}}"
+									],
+									"path": [
+										"{{cPath}}",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "INVALID DATA FIELD",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Verify if status code is 4XX client error\", function () {\r",
+											"    pm.response.to.be.clientError;\r",
+											"    pm.response.to.have.status(422);\r",
+											"    pm.response.to.have.status(\"Unprocessable Entity\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 596564be8cf77ca21617c3b4a0bd51c3f2d31b8bab4c0e97921b26475ea85f12"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name1\": \"Test\",\r\n    \"gender\": \"male\",\r\n    \"mobileNumber\": \"9876543210\",\r\n    \"age\": \"100\",\r\n    \"email\": \"abd@gmaill.com\",\r\n    \"status\": \"active\",\r\n    \"Invalid Filed\": \"active\"\r\n}"
+								},
+								"url": {
+									"raw": "{{eProtocol}}://{{eBaseURL}}/{{cPath}}/users",
+									"protocol": "{{eProtocol}}",
+									"host": [
+										"{{eBaseURL}}"
+									],
+									"path": [
+										"{{cPath}}",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "INVALID DATA LENGTH",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Verify if status code is 4XX client error\", function () {\r",
+											"    pm.response.to.be.clientError;\r",
+											"    pm.response.to.have.status(422);\r",
+											"    pm.response.to.have.status(\"Unprocessable Entity\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 596564be8cf77ca21617c3b4a0bd51c3f2d31b8bab4c0e97921b26475ea85f12"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"TestTestTest TestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTestTestTestTest TestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTestTestTestTest TestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTestTestTestTest TestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTestTestTestTest TestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTestTestTestTest TestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTestTestTestTest TestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTestTestTestTest TestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTestTestTestTest TestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTestTestTestTest TestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTestTestTestTest TestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTestTestTestTest TestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTestTestTestTest TestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTestTestTestTest TestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTestTestTestTest TestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTest TestTestTestTestTestTest\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"TestTestTestTestTes@gmail.com\",\r\n    \"status\": \"active\"\r\n}"
+								},
+								"url": {
+									"raw": "{{eProtocol}}://{{eBaseURL}}/{{cPath}}/users",
+									"protocol": "{{eProtocol}}",
+									"host": [
+										"{{eBaseURL}}"
+									],
+									"path": [
+										"{{cPath}}",
+										"users"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "INTEROPERABILITY TESTING",
+			"item": [
+				{
+					"name": "CREATE USER API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify if status code is 201 Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.have.status(\"Created\");\r",
+									"});\r",
+									"\r",
+									"var jsonBody = pm.response.json();\r",
+									"var extractedID = jsonBody.id;\r",
+									"pm.collectionVariables.set(\"cUserID\", extractedID);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 596564be8cf77ca21617c3b4a0bd51c3f2d31b8bab4c0e97921b26475ea85f12"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows; U; Windows NT 5.3) AppleWebKit/533.1.1 (KHTML, like Gecko) Chrome/15.0.826.0 Safari/533.1.1",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Test\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"status\": \"active\"\r\n}"
+						},
+						"url": {
+							"raw": "{{eProtocol}}://{{eBaseURL}}/{{cPath}}users",
+							"protocol": "{{eProtocol}}",
+							"host": [
+								"{{eBaseURL}}"
+							],
+							"path": [
+								"{{cPath}}users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE USER API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify if status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 596564be8cf77ca21617c3b4a0bd51c3f2d31b8bab4c0e97921b26475ea85f12"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows; U; Windows NT 6.0) AppleWebKit/532.0.2 (KHTML, like Gecko) Chrome/21.0.823.0 Safari/532.0.2",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"status\": \"active\"\r\n}"
+						},
+						"url": {
+							"raw": "{{eProtocol}}://{{eBaseURL}}/{{cPath}}users/{{cUserID}}",
+							"protocol": "{{eProtocol}}",
+							"host": [
+								"{{eBaseURL}}"
+							],
+							"path": [
+								"{{cPath}}users",
+								"{{cUserID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE USER API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify if status code is 204 No Content\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"    pm.response.to.have.status(\"No Content\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 596564be8cf77ca21617c3b4a0bd51c3f2d31b8bab4c0e97921b26475ea85f12"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows; U; Windows NT 6.3) AppleWebKit/531.2.1 (KHTML, like Gecko) Chrome/18.0.846.0 Safari/531.2.1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{eProtocol}}://{{eBaseURL}}/{{cPath}}users/{{cUserID}}",
+							"protocol": "{{eProtocol}}",
+							"host": [
+								"{{eBaseURL}}"
+							],
+							"path": [
+								"{{cPath}}users",
+								"{{cUserID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FUZZ TESTING",
+			"item": [
+				{
+					"name": "CREATE USER API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify if status code is 201 Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.have.status(\"Created\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if response body contains id, name, email, gender, status\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"gender\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"status\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if Content-Type=application/json; charset=utf-8\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if gender is [male, female]\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.gender).to.be.oneOf([\"male\", \"female\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if status is [active, inactive]\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.be.oneOf([\"active\", \"inactive\"]);\r",
+									"});\r",
+									"\r",
+									"var jsonBody = pm.response.json();\r",
+									"var extractedID = jsonBody.id;\r",
+									"\r",
+									"pm.collectionVariables.set(\"cID\", extractedID);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 596564be8cf77ca21617c3b4a0bd51c3f2d31b8bab4c0e97921b26475ea85f12"
+							},
+							{
+								"key": "User-Agent",
+								"value": "{{$randomUserAgent}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomNamePrefix}} {{$randomFirstName}}\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"status\": \"active\"\r\n}"
+						},
+						"url": {
+							"raw": "{{eProtocol}}://{{eBaseURL}}/{{cPath}}users",
+							"protocol": "{{eProtocol}}",
+							"host": [
+								"{{eBaseURL}}"
+							],
+							"path": [
+								"{{cPath}}users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE USER API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify if status code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if response body contains id, name, email, gender, status\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"gender\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"status\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if Content-Type=application/json; charset=utf-8\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if gender is [male, female]\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.gender).to.be.oneOf([\"male\", \"female\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if status is [active, inactive]\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.status).to.be.oneOf([\"active\", \"inactive\"]);\r",
+									"});\r",
+									"\r",
+									"console.log(\"The HTTP method used in the API request is \"+pm.request.method);\r",
+									"console.log(\"The API URL in the request is \"+pm.request.url);\r",
+									"console.log(\"The API request name is \"+pm.info.requestName);\r",
+									"console.log(\"The request headers in the request are \"+pm.request.headers);\r",
+									"console.log(\"The request body is \");\r",
+									"console.log(pm.request.body);\r",
+									"console.log(\"The API request size is \");\r",
+									"console.log(pm.request.size());\r",
+									"\r",
+									"var responseBody = pm.response.json();\r",
+									"console.log(\"The data type of id field is \"+typeof(responseBody.id));\r",
+									"console.log(\"The data type of email field is \"+typeof(responseBody.email));\r",
+									"console.log(\"The data type of name field is \"+typeof(responseBody.name));\r",
+									"console.log(\"The data type of status field is \"+typeof(responseBody.status));\r",
+									"console.log(\"The data type of gender field is \"+typeof(responseBody.gender));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 596564be8cf77ca21617c3b4a0bd51c3f2d31b8bab4c0e97921b26475ea85f12"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":  \"{{$randomNamePrefix}} {{$randomFirstName}}\",\r\n    \"email\": \"{{$randomEmail}}\"\r\n    \r\n}"
+						},
+						"url": {
+							"raw": "{{eProtocol}}://{{eBaseURL}}/{{cPath}}users/{{cID}}",
+							"protocol": "{{eProtocol}}",
+							"host": [
+								"{{eBaseURL}}"
+							],
+							"path": [
+								"{{cPath}}users",
+								"{{cID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "cAuthorizationToken",
+			"value": ""
+		},
+		{
+			"key": "cProtocol",
+			"value": "https"
+		},
+		{
+			"key": "cBaseURL",
+			"value": "gorest.co.in"
+		},
+		{
+			"key": "cPath",
+			"value": "public/v2/",
+			"type": "string"
+		},
+		{
+			"key": "cID",
+			"value": ""
+		},
+		{
+			"key": "cName",
+			"value": ""
+		},
+		{
+			"key": "cEmail",
+			"value": ""
+		},
+		{
+			"key": "cUserID",
+			"value": ""
+		}
+	]
+}
